@@ -6,7 +6,7 @@
     "props":{
       "className":"canvas-root",
       "style":{"padding":"20px",
-        "backgroundColor:"#f5f5f5"}
+        "backgroundColor":"#f5f5f5"}
     },
     "children":[
       {
