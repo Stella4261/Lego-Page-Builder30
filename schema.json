@@ -1,11 +1,24 @@
 {
-  "name":"Lego-Page-Builder30",
-  "version":"1.0.0",
-  "description":"低代码可视化页面的构造器|拖拽生成网页的前端项目”,
-  "components":[],
-  "layout":{
-    "type":"grid",
-    "columns":12
+  "pageName":"我的第一个页面",
+  "root":{
+    "id":"root_001",
+    "type":"Container",
+    "props":{
+      "className":"canvas-root",
+      "style":{"padding":"20px",
+        "backgroundColor:"#f5f5f5"}
+    },
+    "children":[
+      {
+        "id":"btn_001",
+        "type":"Button",
+        "props":{
+          "text":"点击提交",
+          "variant":"primary"
+        },
+        "children":[]
+      }
+    ]
   }
 }
   
