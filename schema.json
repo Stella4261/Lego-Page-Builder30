@@ -1,0 +1,11 @@
+{
+  "name":"Lego-Page-Builder30",
+  "version":"1.0.0",
+  "description":"低代码可视化页面的构造器|拖拽生成网页的前端项目”,
+  "components":[],
+  "layout":{
+    "type":"grid",
+    "columns":12
+  }
+}
+  
