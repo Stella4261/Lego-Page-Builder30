@@ -66,6 +66,7 @@ const materials = [
   { type: 'Input', label: '📝 输入框 Input' },
   { type: 'Container', label: '📦 容器 Container' },
   { type: 'Text', label: '🔤 文本 Text' },
+  { type: 'Image', label: '🖼 图片 Image'},
 ];
 
 

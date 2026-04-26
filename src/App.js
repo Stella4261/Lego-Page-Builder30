@@ -63,6 +63,7 @@ export default function App() {
   onClick={() => dispatch(setSelectedId(null))}
 >
   <div style={{
+    width:'100%',
     transform: `scale(${zoom / 100})`,
     transformOrigin: 'top center',
     transition: 'transform 0.2s',
