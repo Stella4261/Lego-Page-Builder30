@@ -1,5 +1,5 @@
 import React from 'react';
-
+//  RadioGroupSetter：单选按钮，几个选项并排点选，只能选一个（比如左对齐/居中/右对齐）。
 export default function RadioGroupSetter({ value, onChange, options = [] }) {
   // 生成随机 name，确保多组 Radio 互不干扰
   const groupName = React.useId(); 

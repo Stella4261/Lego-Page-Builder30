@@ -1,5 +1,6 @@
 import { useDrag } from 'react-dnd';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { addPage, switchPage } from '../../store/pageSlice';
 // 这是低代码平台的左侧物料面板
 // 作用：展示可拖拽的组件列表，让用户能把组件拖到中间画布。
 
@@ -72,13 +73,54 @@ const materials = [
 
 //渲染左侧面板
 export default function LeftPanel() {
+  const dispatch = useDispatch();
+  const pages = useSelector(state => state.page.present.pages);
+  const currentPageId = useSelector(state => state.page.present.currentPageId);
+
   return (
     <aside className="left-panel">
-      {/* 循环物料数组，把每一个物料都渲染成一个可拖拽的组件块。 */}
+      {/* 页面列表 */}
+      <div style={{ marginBottom: '16px', borderBottom: '1px solid #444', paddingBottom: '12px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+          <span style={{ fontSize: '12px', color: '#888' }}>页面列表</span>
+          <button
+            onClick={() => dispatch(addPage())}
+            style={{
+              fontSize: '11px',
+              padding: '2px 8px',
+              backgroundColor: '#1677ff',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '3px',
+              cursor: 'pointer'
+            }}
+          >
+            + 新建
+          </button>
+        </div>
+        {pages.map(page => (
+          <div
+            key={page.id}
+            onClick={() => dispatch(switchPage(page.id))}
+            style={{
+              padding: '6px 8px',
+              marginBottom: '4px',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '12px',
+              backgroundColor: page.id === currentPageId ? '#1677ff' : '#333',
+              color: '#fff',
+            }}
+          >
+            {page.name}
+          </div>
+        ))}
+      </div>
+
+      {/* 物料库 */}
       <h3 style={{ marginBottom: '16px' }}>物料库</h3>
       {materials.map(m => (
-        //  就是父组件 LeftPanel 遍历数据，把每一项的 type 和 label 传给子组件 DraggableItem
-        <DraggableItem key={m.type} type={m.type} label={m.label} />  // map 遍历组件 → 必须加 key
+        <DraggableItem key={m.type} type={m.type} label={m.label} />
       ))}
     </aside>
   );

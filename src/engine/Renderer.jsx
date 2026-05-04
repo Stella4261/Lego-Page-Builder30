@@ -3,7 +3,7 @@ import {useSelector,useDispatch} from 'react-redux';
 import {setSelectedId, addNode, moveNode} from '../store/pageSlice';
 import {useDrop,useDrag} from 'react-dnd';
 import EditWrapper from '../editor/Canvas/EditWrapper'; 
-
+import { selectCurrentRoot } from '../store/pageSlice';
 
 // 这是一个低代码平台的核心渲染器：
 // 它根据 Redux 里存的JSON 结构（页面 schema），递归渲染出真实 React 组件，
@@ -126,7 +126,7 @@ function RenderNode({node}){
 
 //对外暴露的入口：从Redux拿到root节点，开始渲染
 export default function Renderer() {
-  const root = useSelector((state) => state.page.present.schema.root);
+  const root = useSelector(selectCurrentRoot);
   if (!root) return null;
   return <RenderNode node={root} />;
 }

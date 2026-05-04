@@ -1,4 +1,5 @@
-import React from 'react';
+// SelectSetter：下拉选择框，选项多的时候用，点开列表选一个（比如实线/虚线、字体）。
+
 
 export default function SelectSetter({ value, options, onChange }) {
   return (

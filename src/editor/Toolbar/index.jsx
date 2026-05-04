@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { ActionCreators } from 'redux-undo'
 import { loadSchema } from '../../store/pageSlice'
-
+import { selectCurrentSchema } from '../../store/pageSlice';
 
 export default function Toolbar({ zoom, onZoomIn, onZoomOut, onZoomReset }) {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ export default function Toolbar({ zoom, onZoomIn, onZoomOut, onZoomReset }) {
   const canUndo = useSelector(state => state.page.past.length > 0)
   const canRedo = useSelector(state => state.page.future.length > 0)
   //  schema ：整个页面的结构（所有组件、嵌套、属性），是一个大对象
-  const schema = useSelector(state => state.page.present.schema)
+  const schema = useSelector(selectCurrentSchema);
   //导出JSON :把页面结构转成JSON字符串 → 包装成文件 → 生成临时地址 → 创建下载链接 → 模拟点击 → 下载到电脑
   const handleExport = () => {
 // 第一个参数： schema --要转成 JSON 字符串的 对象/数据

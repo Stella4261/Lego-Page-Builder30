@@ -1,10 +1,10 @@
-import React, { useEffect ,useState} from 'react'
+import { useEffect ,useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { ActionCreators } from 'redux-undo'
 import './global.css'
 import {setSelectedId} from './store/pageSlice';
 import ErrorBoundary from './editor/ErrorBoundary';
-
+import { selectCurrentSchema } from './store/pageSlice';
 import Toolbar from './editor/Toolbar'
 import LeftPanel from './editor/LeftPanel'
 import RightPanel from './editor/RightPanel'
@@ -12,7 +12,8 @@ import Renderer from './engine/Renderer'
 
 export default function App() {
   const dispatch = useDispatch()
-  const pageName = useSelector(state => state.page.present.schema.pageName)
+  const schema = useSelector(selectCurrentSchema);
+  const pageName = schema?.pageName;
   const [zoom, setZoom] = useState(100);
   const handleZoomIn = () => setZoom(z => Math.min(z + 10, 150));
   const handleZoomOut = () => setZoom(z => Math.max(z - 10, 50));
@@ -58,14 +59,25 @@ export default function App() {
         <LeftPanel />
 
         {/* 中间画布 */}
-        <main
+<main
   className="canvas"
   onClick={() => dispatch(setSelectedId(null))}
+  style={{
+    flex: 1,
+    overflow: 'auto',
+    display: 'flex',
+    justifyContent: 'center',  // 水平居中
+    alignItems: 'flex-start',  // 顶部对齐
+    padding: '40px',
+    backgroundColor: '#f0f2f5',
+  }}
 >
   <div style={{
-    width:'100%',
+    width: '900px',
+    minHeight:'600px',
+    flexShrink: 0,
     transform: `scale(${zoom / 100})`,
-    transformOrigin: 'top center',
+    transformOrigin: 'top center',  // 以自身中心为基点缩放
     transition: 'transform 0.2s',
   }}>
     <div className="canvas-container">
@@ -78,7 +90,6 @@ export default function App() {
     </div>
   </div>
 </main>
-
         {/* 右侧属性面板 */}
         <RightPanel />
 

@@ -1,5 +1,4 @@
-import React from 'react';
-
+// ColorSetter：选颜色专用，点开拾色器挑颜色，自动返回颜色代码。
 export default function ColorSetter({ value, onChange }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

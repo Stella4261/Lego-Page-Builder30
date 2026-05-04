@@ -28,26 +28,16 @@
     flex-shrink:0; /*禁止被压缩*/
  }
 
- /* 4.中间画布区：浅色系 */
- .canvas{
-    flex:1;/*核心：占据所有剩余空间*/
-    background:#f0f2f5;
-    padding:40px;
-    overflow-y:visible;/*允许垂直滚动*/
-    display:flex;
-    justify-content:center;/*水平居中*/
- }
+ 
 
  /* 画布内部纸张感 */
- .canvas-container{
-    width:100%;
-    max-width:800px;/*模拟一个网页的宽度*/
-    background:#ffffff;
-    min-height:100%;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
-    padding:20px;
-
- }
+ .canvas-container {
+  width: 100%;
+  min-height: 900px;   /* 改大 */
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 20px;
+}
 
  /*5. 右侧属性面板：白色背景 */
 .right-panel{
