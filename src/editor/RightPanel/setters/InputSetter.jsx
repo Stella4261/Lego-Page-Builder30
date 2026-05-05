@@ -15,16 +15,11 @@
 export default function InputSetter({ value, onChange }) {
   return (
     <input
+      className="setter-input"
       value={value || ''}
+      onChange={(e) => onChange(e.target.value)}
 // 最左边  onChange ： 是 HTML 原生 input 事件：监听输入框内容有没有变化。
 // 箭头函数里的  onChange(e.target.value) ：是 函数入参解构出来的那个 onChange = 父给的回调。
-      onChange={(e) => onChange(e.target.value)}
-      style={{
-        width: '100%',
-        padding: '6px',
-        border: '1px solid #ddd',
-        borderRadius: '4px'
-      }}
     />
   );
 }

@@ -1,15 +1,17 @@
 import { componentMap } from '../components/index'
+// 从  localStorage  拿到编辑器存的页面 JSON 结构，递归渲染组件树，实现可视化预览。
 
 function PreviewNode({ node }) {
   const Component = componentMap[node.type]
 
   if (!Component) {
-    return <div style={{ color: 'red' }}>未知组件: {node.type}</div>
+    return <div className="render-node-error">未知组件: {node.type}</div>;
   }
 
   return (
     <Component {...node.props}>
       {node.children?.map(child => (
+        // key={child.id} React 列表循环必须要有唯一 key，用组件唯一 id 就行。
         <PreviewNode key={child.id} node={child} />
       ))}
     </Component>
@@ -17,6 +19,7 @@ function PreviewNode({ node }) {
 }
 
 export default function PreviewPage() {
+  //  localStorage.getItem('键名') ：从浏览器本地存储取值
   const raw = localStorage.getItem('preview_schema')
   const schema = raw ? JSON.parse(raw) : null
 
@@ -28,42 +31,19 @@ export default function PreviewPage() {
     )
   }
 
-  return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#fff' }}>
-
-      {/* 预览顶栏 */}
-      <div style={{
-        height: '40px',
-        backgroundColor: '#1f1f1f',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 16px',
-        justifyContent: 'space-between',
-      }}>
-        <span style={{ color: '#999', fontSize: '12px' }}>
+   return (
+    <div className="preview-page">
+      <div className="preview-toolbar">
+        <span className="preview-toolbar-info">
           👁 预览模式 — {schema.pageName}
         </span>
-        <button
-          onClick={() => window.close()}
-          style={{
-            padding: '4px 12px',
-            backgroundColor: '#333',
-            color: '#fff',
-            border: '1px solid #555',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '12px',
-          }}
-        >
+        <button className="preview-toolbar-btn" onClick={() => window.close()}>
           关闭预览
         </button>
       </div>
-
-      {/* 页面内容：纯渲染 schema */}
-      <div style={{ padding: '24px' }}>
+      <div className="preview-content">
         <PreviewNode node={schema.root} />
       </div>
-
     </div>
-  )
+  );
 }

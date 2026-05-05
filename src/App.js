@@ -40,9 +40,11 @@ export default function App() {
 
   // 组件卸载时，清除监听，防止内存泄漏
   return () => window.removeEventListener('keydown', handleKeyDown)
-}, [dispatch])  // 依赖项：dispatch 变化时才会重新执行useEffect
+  }, [dispatch])  // 依赖项：dispatch 变化时才会重新执行useEffect
+
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div className="app-layout">
 
       {/* 顶部工具栏 */}
       <Toolbar
@@ -53,47 +55,30 @@ export default function App() {
       />
 
       {/* 三栏编辑区 */}
-      <div className="editor-layout" style={{ flex: 1, overflow: 'visible' }}>
+      <div className="editor-layout">
 
-        {/* 左侧物料库 */}
-        <LeftPanel />
+      {/* 左侧物料库 */}
+      <LeftPanel />
 
-        {/* 中间画布 */}
-<main
-  className="canvas"
-  onClick={() => dispatch(setSelectedId(null))}
-  style={{
-    flex: 1,
-    overflow: 'auto',
-    display: 'flex',
-    justifyContent: 'center',  // 水平居中
-    alignItems: 'flex-start',  // 顶部对齐
-    padding: '40px',
-    backgroundColor: '#f0f2f5',
-  }}
->
-  <div style={{
-    width: '900px',
-    minHeight:'600px',
-    flexShrink: 0,
-    transform: `scale(${zoom / 100})`,
-    transformOrigin: 'top center',  // 以自身中心为基点缩放
-    transition: 'transform 0.2s',
-  }}>
-    <div className="canvas-container">
-      <h2 style={{ marginBottom: '20px', fontSize: '14px', color: '#999' }}>
-        {pageName}
-      </h2>
-      <ErrorBoundary>
-        <Renderer />
-      </ErrorBoundary>
-    </div>
-  </div>
-</main>
-        {/* 右侧属性面板 */}
-        <RightPanel />
+{/* 中间画布 */}
+<main className="canvas" onClick={() => dispatch(setSelectedId(null))}>
+        <div
+          className="canvas-zoom-wrapper"
+          style={{ transform: `scale(${zoom / 100})` }}
+        >
+          <div className="canvas-container">
+            <p className="canvas-page-title">{pageName}</p >
+            <ErrorBoundary>
+              <Renderer />
+            </ErrorBoundary>
+          </div>
+        </div>
+      </main>
+
+      {/* 右侧属性面板 */}
+      <RightPanel />
 
       </div>
     </div>
-  )
+  );
 }

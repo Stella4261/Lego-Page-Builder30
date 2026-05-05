@@ -39,18 +39,8 @@ function DraggableItem({ type, label }) {
   //渲染DOM结构
   return (
     <div
-      ref={drag}   //  只有加了  ref={drag} ，这个 div 才可以被鼠标拖起来。
-      style={{
-        padding: '10px 12px',
-        marginBottom: '8px',
-        backgroundColor: isDragging ? '#e6f4ff' : '#fff',   //  拖拽时背景变浅蓝色，否则白色
-        border: '1px solid #d9d9d9',
-        borderRadius: '6px',
-        cursor: 'grab',  //  鼠标移上去变成“抓手”样式
-        opacity: isDragging ? 0.5 : 1,  // 拖拽时变半透明
-        fontSize: '13px',
-        userSelect: 'none',  //  禁止拖动时不小心选中文字
-      }}
+      ref={drag}
+      className={`material-item ${isDragging ? 'material-item--dragging' : ''}`}
     >
       {/* {}表示 这里要放 JS 变量/表达式 */}
        {label}   {/* 显示按钮名字 */}
@@ -79,43 +69,37 @@ export default function LeftPanel() {
 
   return (
     <aside className="left-panel">
-      {/* 页面列表 */}
-      <div style={{ marginBottom: '16px', borderBottom: '1px solid #444', paddingBottom: '12px' }}>
+      <h3>页面列表</h3>
+      <div className="page-list">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <span style={{ fontSize: '12px', color: '#888' }}>页面列表</span>
           <button
+            className="toolbar-btn toolbar-btn--primary"
+            style={{ fontSize: '11px', padding: '2px 8px' }}
             onClick={() => dispatch(addPage())}
-            style={{
-              fontSize: '11px',
-              padding: '2px 8px',
-              backgroundColor: '#1677ff',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '3px',
-              cursor: 'pointer'
-            }}
           >
             + 新建
           </button>
         </div>
         {pages.map(page => (
-          <div
-            key={page.id}
-            onClick={() => dispatch(switchPage(page.id))}
-            style={{
-              padding: '6px 8px',
-              marginBottom: '4px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '12px',
-              backgroundColor: page.id === currentPageId ? '#1677ff' : '#333',
-              color: '#fff',
-            }}
-          >
-            {page.name}
+          <div key={page.id} className="page-item">
+            <div
+              className={`page-item-name ${page.id === currentPageId ? 'page-item-name--active' : ''}`}
+              onClick={() => dispatch(switchPage(page.id))}
+            >
+              {page.name}
+            </div>
+            {pages.length > 1 && (
+              <span
+                className="page-item-delete"
+                onClick={() => dispatch(deletePage(page.id))}
+              >
+                ×
+              </span>
+            )}
           </div>
         ))}
       </div>
+
 
       {/* 物料库 */}
       <h3 style={{ marginBottom: '16px' }}>物料库</h3>

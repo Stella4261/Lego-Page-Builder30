@@ -1,16 +1,15 @@
-//页面上真实的输入框组件
-//{ placeholder }：从外面传进来的属性
+import type { ComponentProps } from '../../types/schema';
 
-interface InputProps {
+interface InputProps extends ComponentProps {
   placeholder?: string;
-  style?: React.CSSProperties;
 }
 
-export default function Input({ placeholder, style }:InputProps) {
+export default function Input({ placeholder, style }: InputProps) {
   return (
-    <input 
-      placeholder={placeholder} 
-      style={{ padding: '4px 8px', ...style }} // 确保 style 被应用
+    <input
+      placeholder={placeholder}
+      className="custom-input"
+      style={style}
     />
   );
 }

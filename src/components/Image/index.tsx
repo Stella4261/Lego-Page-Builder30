@@ -1,39 +1,34 @@
 import React from 'react';
+import type { ComponentProps } from '../../types/schema';
 
-interface ImageProps {
+interface ImageProps extends ComponentProps {
   src?: string;
   alt?: string;
-  style?: React.CSSProperties;
 }
 
 export default function Image({ src, alt, style }: ImageProps) {
+  // 如果没有图片地址，显示占位图
   if (!src) {
+    const placeholderStyle: React.CSSProperties = {
+      width: style?.width || '100%',
+      height: style?.height || '120px',
+      ...style,
+    };
+
     return (
-      <div style={{
-        width: style?.width || '100%',
-        height: style?.height || '120px',
-        backgroundColor: '#f0f0f0',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#999',
-        fontSize: '13px',
-        border: '1px dashed #ccc',
-        ...style
-      }}>
+      <div className="custom-image-placeholder" style={placeholderStyle}>
         🖼 请输入图片地址
       </div>
     );
   }
+
+  // 正常显示图片
   return (
     <img
       src={src}
       alt={alt || ''}
-      style={{
-        display: 'block',
-        maxWidth: '100%',
-        ...style
-      }}
+      className="custom-image"
+      style={style}
     />
   );
 }

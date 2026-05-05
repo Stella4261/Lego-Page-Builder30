@@ -1,14 +1,12 @@
-import React from 'react';
+import type { ComponentProps } from '../../types/schema';
 
-interface TextProps {
+interface TextProps extends ComponentProps {
   text?: string;
-  style?: React.CSSProperties;
 }
 
-// 接收 style 参数
-export default function Text({ text, style }:TextProps) {
+export default function Text({ text, style }: TextProps) {
   return (
-    <span style={{ display: 'inline-block', fontSize: '14px', color: '#333', ...style }}>
+    <span className="custom-text" style={style}>
       {text}
     </span>
   );

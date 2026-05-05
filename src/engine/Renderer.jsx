@@ -19,7 +19,12 @@ function genId(type){
 const defaultProps = {
   Button: { text: '新按钮', variant: 'primary' },
   Input: { placeholder: '请输入内容' },
-  Container: { style: { padding: '16px', backgroundColor: '#fff', minHeight: '60px' } },
+  Container: {
+    style: {
+      padding: '16px',
+      backgroundColor: '#fff',
+  }
+},
   Text: { text: '双击编辑文本' },
 };
 
@@ -91,33 +96,32 @@ function RenderNode({node}){
 
 
     return (
-        <div
 //         ref={drop}  = 把这个 div 传给 drop 函数
 //                     = drop 函数拿到 DOM 并把它变成可拖放区域
         // ref={drop}
-        ref={(el) => drag(drop(el))}
-        onClick={(e)=>{
-               e.stopPropagation(); //阻止事件冒泡，防止点按钮时连着选中了外层的容器
-               dispatch(setSelectedId(node.id));
-           }}
-         style={{
-        opacity: isDragging ? 0.4 : 1,       // 拖起来时半透明
-        outline: isOver ? '2px dashed #52c41a' : '2px solid transparent',
-        cursor: 'grab',
-        position: 'relative',
-        backgroundColor: isOver ? 'rgba(82,196,26,0.04)' : 'transparent',
-        transition: 'opacity 0.2s',
-      }}
-      >
+  <div
+    ref={(el) => drag(drop(el))}
+    className="render-node-wrapper"
+    onClick={(e) => {
+      e.stopPropagation();
+      dispatch(setSelectedId(node.id));
+    }}
+    style={{
+      // 只保留动态样式
+      opacity: isDragging ? 0.35 : 1,
+      outline: isOver ? '2px dashed #52c41a' : 'none',
+      backgroundColor: isOver ? 'rgba(82,196,26,0.06)' : 'transparent',
+    }}
+  >
            <EditWrapper node={node}>
             {/* 渲染真实组件，并把props传出去 */}
-            <Component {...node.props}  id = {node.id}>  {/*Component  是你要渲染的真实组件：Button / Input / Container / Text */}
+            <Component {...node.props}  id = {node.id}  style={{ ...node.props.style, }}>  {/*Component  是你要渲染的真实组件：Button / Input / Container / Text */}
                 {/* 递归调用：如果它有children,继续循环渲染 */}
                 {node.children&&node.children.map((child)=>(                  
                     <RenderNode key={child.id} node={child} />
                 ))}
             </Component>
-            </EditWrapper>
+          </EditWrapper>
         </div>
     );
 }

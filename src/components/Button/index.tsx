@@ -1,5 +1,4 @@
-import React from 'react';
-
+import type { ComponentProps } from '../../types/schema';
 // TS 接口，用来约束组件能接收哪些参数、是什么类型：
 // 1.  text: string 
 // - 必传
@@ -11,9 +10,10 @@ import React from 'react';
 // - 可选
 // - 接收 React 行内样式对象（和普通 button 的 style 写法一致）
 
-interface ButtonProps {
+interface ButtonProps extends ComponentProps {
   text: string;
   variant?: 'primary' | 'default';
+}
   // React.CSSProperties  是 React 内置的 TS 类型，专门用来约束 JSX 行内 style 对象 的类型。
 //   ① 属性强制驼峰
 // 和普通 CSS 不一样：
@@ -24,8 +24,6 @@ interface ButtonProps {
 // - 宽高、间距：传字符串  '10px' / '2rem' 
 // - 颜色： '#fff' / 'red' 
 // - 错误写法会直接红线报错，杜绝样式写错。
-  style?: React.CSSProperties;
-}
 
 // 必须在参数里接收 style 属性！
 // style: incomingStyle
@@ -33,20 +31,15 @@ interface ButtonProps {
 // -  baseStyle ：组件内部写好的默认基础样式
 // -  incomingStyle ：外部使用者传进来的自定义样式
 
-export default function Button({ text, variant, style: incomingStyle }:ButtonProps) {
-  const baseStyle = {
-    padding: '8px 16px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    border: 'none',
-    backgroundColor: variant === 'primary' ? '#1677ff' : '#eee',
-    color: variant === 'primary' ? '#fff' : '#333',
-  };
-
+export default function Button({ text, variant = 'default', style }: ButtonProps) {
+  const variantClass = variant === 'primary' ? 'custom-button-primary' : 'custom-button-default';
   //组件里的 return，就是渲染出口
   return (
     // 关键：用传入的 incomingStyle 覆盖默认样式
-    <button style={{ ...baseStyle, ...incomingStyle }}>
+    <button 
+      className={`custom-button ${variantClass}`} 
+      style={style}
+    >
       {text}
     </button>
   );

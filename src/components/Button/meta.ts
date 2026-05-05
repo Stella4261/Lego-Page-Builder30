@@ -1,19 +1,20 @@
-export const ButtonMeta = {
+import type { ComponentMeta } from '../../types/schema';
+
+export const ButtonMeta: ComponentMeta = {
   type: 'Button', //type ：组件唯一标识，内部用来识别是哪个组件
   displayName: '按钮', //displayName ：编辑器左侧组件库、画布上展示的中文名称
   setters: [
     { name: 'text', label: '按钮文字', type: 'InputSetter' },
     { name: 'variant', label: '内置主题', type: 'SelectSetter', options: [
-        { label: '主色调 (Primary)', value: 'primary' },
-        { label: '默认白 (Default)', value: 'default' }
+      { label: '主色调', value: 'primary' },
+      { label: '默认白', value: 'default' }
     ]},
-    // 样式配置块
     { name: 'style.backgroundColor', label: '背景颜色', type: 'ColorSetter' },
     { name: 'style.color', label: '文字颜色', type: 'ColorSetter' },
-    { name: 'style.borderRadius', label: '圆角 (px)', type: 'NumberSetter' },
-    { name: 'style.width', label: '宽度 (px/%)', type: 'InputSetter' },
-    { name: 'style.height', label: '高度 (px)', type: 'InputSetter' },
-    { name: 'style.marginTop', label: '上边距 (px)', type: 'NumberSetter' }
+    { name: 'style.borderRadius', label: '圆角', type: 'NumberSetter' },
+    { name: 'style.width', label: '宽度', type: 'InputSetter' },
+    { name: 'style.height', label: '高度', type: 'InputSetter' },
+    { name: 'style.marginTop', label: '上边距', type: 'NumberSetter' }
   ]
 };
 

@@ -1,19 +1,17 @@
 import React from 'react';
 //  RadioGroupSetter：单选按钮，几个选项并排点选，只能选一个（比如左对齐/居中/右对齐）。
 export default function RadioGroupSetter({ value, onChange, options = [] }) {
-  // 生成随机 name，确保多组 Radio 互不干扰
-  const groupName = React.useId(); 
-
+  const groupName = React.useId();
   return (
-    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+    <div className="radio-group">
       {options.map(opt => (
-        <label key={opt.value} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontSize: '13px', color: '#555' }}>
+        <label key={opt.value} className="radio-label">
           <input
             type="radio"
+            className="radio-input"
             name={groupName}
             checked={value === opt.value}
             onChange={() => onChange(opt.value)}
-            style={{ marginRight: '6px', cursor: 'pointer' }}
           />
           {opt.label}
         </label>

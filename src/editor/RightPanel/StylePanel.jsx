@@ -60,13 +60,13 @@ export default function StylePanel({ node, selectedId }) {
 
   //第一个 return：整个  StylePanel  组件的返回，返回整个样式面板 JSX
   return (
-    <div className="style-panel" style={{ marginTop: '20px', borderTop: '1px solid #eee', paddingTop: '10px' }}>
-      <h4 style={{ color: '#333', marginBottom: '10px' }}>🎨 通用样式</h4>
+    <div className="style-panel">
+      <h4>🎨 通用样式</h4>
       
       {/* 没有样式配置就提示 */}
       {styleConfigs.length === 0 && <p style={{ color: '#999', fontSize: '12px' }}>该组件暂无样式配置</p >}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+      <div className="style-panel-grid">
         {/* 循环遍历所有样式配置，自动批量生成一行一行的样式设置项。 */}
         {styleConfigs.map(config => {
           // 兼容 setterType 和 type 两种写法
@@ -81,7 +81,7 @@ export default function StylePanel({ node, selectedId }) {
           //第二个 return： map  遍历回调函数里的 return，每次循环返回一个「单个样式设置项」JSX
           return (
             <div key={rawKey}>
-              <label style={{ fontSize: '12px', color: '#666', display: 'block' }}>{config.label}</label>
+              <label className="prop-label">{config.label}</label>
               <Setter 
                 {...config}
 

@@ -1,4 +1,4 @@
-import Button from './Button/Button';
+import Button from './Button';
 import Input from './Input';
 import Text from './Text';
 import Container from './Container';
@@ -10,6 +10,7 @@ import { InputMeta } from './Input/meta';
 import { ContainerMeta } from './Container/meta';
 import { TextMeta } from './Text/meta';
 import { ImageMeta } from './Image/meta';
+
 
 // 物料注册中心：编辑器能拖的所有组件，都在这里注册
 // 后续你写了 Button、Input 组件，就 import 进来，挂到 componentMap 上

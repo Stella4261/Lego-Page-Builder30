@@ -3,6 +3,13 @@ import { ActionCreators } from 'redux-undo'
 import { loadSchema } from '../../store/pageSlice'
 import { selectCurrentSchema } from '../../store/pageSlice';
 
+// 这个组件是低代码编辑器顶部工具栏，整合了：撤销/重做、画布缩放、导入JSON、导出JSON、页面预览 全套功能，基于 React + Redux 开发。
+
+// 父组件传进来4个props：
+// 1.  zoom ：当前画布缩放比例（如 100、120、80）
+// 2.  onZoomIn ：放大画布方法
+// 3.  onZoomOut ：缩小画布方法
+// 4.  onZoomReset ：重置缩放为100%方法
 export default function Toolbar({ zoom, onZoomIn, onZoomOut, onZoomReset }) {
   const dispatch = useDispatch();
 // 这是  redux-undo  固定结构：
@@ -16,6 +23,7 @@ export default function Toolbar({ zoom, onZoomIn, onZoomOut, onZoomReset }) {
   const canRedo = useSelector(state => state.page.future.length > 0)
   //  schema ：整个页面的结构（所有组件、嵌套、属性），是一个大对象
   const schema = useSelector(selectCurrentSchema);
+
   //导出JSON :把页面结构转成JSON字符串 → 包装成文件 → 生成临时地址 → 创建下载链接 → 模拟点击 → 下载到电脑
   const handleExport = () => {
 // 第一个参数： schema --要转成 JSON 字符串的 对象/数据
@@ -39,109 +47,86 @@ export default function Toolbar({ zoom, onZoomIn, onZoomOut, onZoomReset }) {
     a.click()  //JS 自动模拟点击，实现自动下载，不用人工再点击
     URL.revokeObjectURL(url) //释放刚才创建的临时地址,清理内存，避免浪费
   }
+
 // 导入 JSON
   const handleImport = (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0] // 获取上传的第一个文件
     if (!file) return
-    const reader = new FileReader()
+    const reader = new FileReader() //FileReader  浏览器文件读取器
     reader.onload = (evt) => {
       try {
-        const json = JSON.parse(evt.target.result)
-        dispatch(loadSchema(json))
+        const json = JSON.parse(evt.target.result) //把文本转回JS对象
+        dispatch(loadSchema(json)) //派发Redux action，用导入的JSON覆盖当前页面配置
       } catch {
         alert('JSON 格式错误')
       }
     }
-    reader.readAsText(file)
+    reader.readAsText(file) //以文本格式读取JSON文件
   }
 
-  // 预览：先存 localStorage，再开新 tab
+  // 预览：把当前编辑器的页面配置 schema 存到浏览器本地缓存  localStorage ，
+  //      然后新开一个浏览器标签页跳转到  /preview  预览页面，实现低代码页面实时预览。
   const handlePreview = () => {
+//  localStorage.setItem(key, value)  往浏览器本地存储里存数据
+// - 键名： preview_schema 
+// - 值：序列化后的页面配置 JSON 字符串，原因： localStorage  只能存字符串，不能直接存对象
+// - 特点：永久存储，关闭浏览器也还在，不清缓存就一直有
     localStorage.setItem('preview_schema', JSON.stringify(schema))
+//  window.open(路由, '_blank') 
+// - _blank  固定含义：在新标签页打开
+// - 跳转到项目路由  /preview  预览页面
     window.open('/preview', '_blank')
   }
 
   return (
-    <header style={{
-      height: '48px',
-      backgroundColor: '#1f1f1f',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0 16px',
-      gap: '8px',
-      flexShrink: 0,
-    }}>
-      <span style={{ color: '#fff', fontWeight: 'bold', marginRight: '16px' }}>
-        🧱 Lego Builder
-      </span>
+    <header className="toolbar">
+      <span className="toolbar-logo">🧱 Lego Builder</span>
 
       <button
+// ActionCreators  是 redux-undo 库自带的对象
+// 里面固定自带 5 个方法：
+// ActionCreators.undo()       // 撤销
+// ActionCreators.redo()       // 重做
+// ActionCreators.jump(n)      // 跳几步历史
+// ActionCreators.jumpToPast() // 跳到某个历史记录
+// ActionCreators.clearHistory() // 清空撤销重做历史
+// 调用  ActionCreators.undo()  本质是：它内部帮你生成了一个固定 type 的 action： { type: "@redux-undo/UNDO" }
+//                                     redo()  就是：{ type: "@redux-undo/REDO" }
+ 
+         className="toolbar-btn"
         onClick={() => dispatch(ActionCreators.undo())}
         disabled={!canUndo}
-        style={btnStyle(canUndo)}
       >
         ↩ 撤销
       </button>
-
       <button
+        className="toolbar-btn"
         onClick={() => dispatch(ActionCreators.redo())}
         disabled={!canRedo}
-        style={btnStyle(canRedo)}
       >
         ↪ 重做
       </button>
 
-  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '8px' }}>
-  <button onClick={onZoomOut} style={btnStyle(zoom > 50)}>－</button>
-  <span
-    onClick={onZoomReset}
-    style={{
-      color: '#aaa',
-      fontSize: '12px',
-      minWidth: '44px',
-      textAlign: 'center',
-      cursor: 'pointer',
-    }}
-  >
-    {zoom}%
-  </span>
-  <button onClick={onZoomIn} style={btnStyle(zoom < 150)}>＋</button>
+  <div className="toolbar-zoom">
+    {/* onZoomOut  是父组件传进来的缩小函数，按钮被点击 → 执行缩小画布逻辑 */}
+  <button className="toolbar-btn" onClick={onZoomOut}>－</button>
+   {/* 点击这个百分比文字，就会触发  onZoomReset ，把画布缩放恢复默认（一般是 100%） */}
+  <span className="toolbar-zoom-value" onClick={onZoomReset}>{zoom}%</span>
+  <button className="toolbar-btn" onClick={onZoomIn}>＋</button>
 </div>
 
-      <div style={{ flex: 1 }} />
+{/* 作用：把左边所有按钮挤到最左，把右边导入/导出/预览按钮全部顶到最右侧 */}
+{/* 原理：父容器是  display: flex  弹性布局；子元素写  flex: 1  的意思是：自己占满剩余所有空白空间。 */}
+{/* <div style={{ flex: 1 }} />  */}
 
-      <label style={{ ...btnStyle(true), cursor: 'pointer' }}>
+      <div className="toolbar-spacer" />
+
+      <label className="toolbar-btn toolbar-btn--label">
         📂 导入 JSON
-        <input
-          type="file"
-          accept=".json"
-          onChange={handleImport}
-          style={{ display: 'none' }}
-        />
+        <input type="file" accept=".json" onChange={handleImport} style={{ display: 'none' }} />
       </label>
-
-      <button onClick={handleExport} style={btnStyle(true)}>
-        💾 导出 JSON
-      </button>
-
-      <button
-        onClick={handlePreview}
-        style={{ ...btnStyle(true), backgroundColor: '#1677ff', borderColor: '#1677ff' }}
-      >
-        🔍 预览
-      </button>
+      <button className="toolbar-btn" onClick={handleExport}>💾 导出 JSON</button>
+      <button className="toolbar-btn toolbar-btn--primary" onClick={handlePreview}>🔍 预览</button>
     </header>
-  )
-}
-
-function btnStyle(enabled) {
-  return {
-    padding: '6px 12px',
-    backgroundColor: enabled ? '#333' : '#2a2a2a',
-    color: enabled ? '#fff' : '#555',
-    border: '1px solid #444',
-    borderRadius: '4px',
-    cursor: enabled ? 'pointer' : 'not-allowed',
-    fontSize: '12px',
-  }
+  );
 }

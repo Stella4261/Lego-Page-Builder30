@@ -27,16 +27,11 @@ export interface SchemaNode {
   children?: SchemaNode[];// 子节点，构成树形结构
 }
 
-// 4. 定义整个页面的 Schema 结构
-export interface PageSchema {
-  root: SchemaNode;
-}
-
 // 5. 定义组件物料元数据 Meta
 export interface SetterConfig {
   name: string;
   label: string;
-  type: 'InputSetter' | 'SelectSetter' | 'ColorSetter' | 'NumberSetter';
+  type: 'InputSetter' | 'SelectSetter' | 'ColorSetter' | 'NumberSetter' | 'RadioGroupSetter';
   options?: Array<{ label: string; value: string }>;
 }
 
@@ -45,4 +40,30 @@ export interface ComponentMeta {
   displayName: string;
   setters: SetterConfig[];
   defaultProps?: ComponentProps;
+}
+export interface PageSchema {
+  pageName: string;
+  root: SchemaNode;
+}
+
+//把一个页面包装成一条记录
+export interface PageItem {
+  id: string;
+  name: string;
+  schema: PageSchema;//绑定上面定义的页面结构  PageSchema 
+}
+
+//页面模块根状态
+export interface PageState {
+  pages: PageItem[]; //所有页面列表，数组支持多页面管理（编辑器可以创建/切换多个页面）
+  currentPageId: string; //当前正在编辑的页面ID，用来定位当前页面
+  selectedId: string | null; //selectedId ：画布中选中的组件ID
+}
+
+export interface RootState {
+  page: {
+    present: PageState;
+    past: PageState[];
+    future: PageState[];
+  };
 }

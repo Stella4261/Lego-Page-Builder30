@@ -59,8 +59,8 @@ export default function RightPanel() {
 // 关键点:它后面紧跟  <div>  → 是 JSX 结构
 // 什么时候才算真正渲染？ 必须等到： {renderPropsPanel()} 这一行，把整个零件数组放进最外层组件的 return 里：
       return (
-        <div key={config.name} style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', fontSize: '12px', color: '#666' }}>{config.label}</label>
+        <div key={config.name} className="prop-item">
+          <label className="prop-label">{config.label}</label>
           <SetterComponent
 // 低代码里重新定义了：
 // 这里的 node.props 不再是组件传参，而是：
@@ -129,24 +129,17 @@ export default function RightPanel() {
 
 //  这是 整个 RightPanel 组件最外层的 return,  这是真正唯一最终渲染到页面的 return
   return (
-    <aside className="right-panel" style={{ width: '300px', padding: '15px', borderLeft: '1px solid #ddd', overflowY: 'auto' }}>
-      <h3>{meta?.displayName || node.type} 配置</h3>
-      
-      {/* 专属属性区 */}
-      <div className="props-section">
-        {renderPropsPanel()}
-      </div>
+  <aside className="right-panel">
+    <h3>{meta?.displayName || node.type} 配置</h3>
 
-      {/* 通用样式区 */}
-      {/*  node = 单个组件的完整信息对象 */}
-      <StylePanel node={node} selectedId={selectedId} />
+    {renderPropsPanel()}
 
-      <button 
-        onClick={() => dispatch(deleteNode({id: selectedId}))} 
-        style={{ width: '100%', marginTop: '20px', padding: '10px', background: '#ff4d4f', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-      >
-        🗑️ 删除当前组件
-      </button>
-    </aside>
-  );
+    <StylePanel node={node} selectedId={selectedId} />
+
+    <button className="delete-btn" onClick={() => dispatch(deleteNode({ id: selectedId }))}>
+      🗑 删除当前组件
+    </button>
+  </aside>
+);
+
 }
