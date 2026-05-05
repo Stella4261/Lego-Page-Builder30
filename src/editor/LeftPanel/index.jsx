@@ -1,6 +1,6 @@
 import { useDrag } from 'react-dnd';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPage, switchPage } from '../../store/pageSlice';
+import { addPage, switchPage,deletePage } from '../../store/pageSlice';
 // 这是低代码平台的左侧物料面板
 // 作用：展示可拖拽的组件列表，让用户能把组件拖到中间画布。
 

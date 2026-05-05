@@ -272,6 +272,15 @@ const pageSlice = createSlice({
     state.currentPageId = action.payload;
     state.selectedId = null;
   },
+
+  deletePage: (state, action) => {
+      if (state.pages.length === 1) return;
+         state.pages = state.pages.filter(p => p.id !== action.payload);
+      if (state.currentPageId === action.payload) {
+         state.currentPageId = state.pages[0].id;
+  }
+  state.selectedId = null;
+},
  },
 })
 
@@ -287,7 +296,7 @@ const pageSlice = createSlice({
 //            pageSlice.actions.switchPage()
 //组件里直接用：ispatch(pageSlice.actions.addNode({ parentId, newNode }))
 export const {
-  setPageName, setSelectedId, updateProps,addNode, deleteNode, duplicateNode,moveNode, moveNodeUp, moveNodeDown,loadSchema, addPage, switchPage
+  setPageName,deletePage, setSelectedId, updateProps,addNode, deleteNode, duplicateNode,moveNode, moveNodeUp, moveNodeDown,loadSchema, addPage, switchPage
 } = pageSlice.actions;
  
 // pageSlice.reducer 就是你写的所有 addNode、moveNode、addPage... 一大堆方法合集
