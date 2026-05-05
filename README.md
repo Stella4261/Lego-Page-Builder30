@@ -1,5 +1,7 @@
 # 🧱 Lego Page Builder
 
+🔗 在线体验：https://lego-page-builder30-baqy.vercel.app
+
 一个基于 React 的低代码可视化页面搭建工具。
 
 ## 功能
